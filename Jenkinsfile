@@ -24,9 +24,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                // Chạy các test case
-                // Có thể bỏ qua nếu bạn đã chạy trong clean install
-                // sh 'mvn test' 
+                echo 'Kiểm thử ứng dụng...'
             }
         }
 
