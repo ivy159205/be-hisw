@@ -4,7 +4,8 @@ pipeline {
     tools {
         // Cấu hình Maven tool đã cài đặt trong Jenkins
         // Đảm bảo bạn đã cài đặt Maven trong Manage Jenkins -> Global Tool Configuration
-        maven 'Maven 3.9.10' 
+        maven 'Maven 3.9.10'
+        jdk 'JDK 21'
     }
 
     stages {
