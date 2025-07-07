@@ -1,0 +1,10 @@
+package com.example.crudsqlserver.repository;
+import com.example.crudsqlserver.model.DailyLog;
+import com.example.crudsqlserver.model.User;
+import java.time.LocalDate;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface DailyLogRepository extends JpaRepository<DailyLog, String> {
+    List<DailyLog> findByUser(User user);
+    List<DailyLog> findByUserAndLogDateBetween(User user, LocalDate start, LocalDate end);
+}
