@@ -1,5 +1,6 @@
 package com.example.Healthcare.service;
 
+
 import com.example.Healthcare.model.DailyLog;
 import com.example.Healthcare.model.HealthRecord;
 import com.example.Healthcare.model.User;
@@ -49,45 +50,45 @@ public class DailyLogServiceImpl implements DailyLogService {
         return List.of();
     }
 
-    @Override
-    public DailyLog createLog(DailyLog log) {
-        // Gán log cho từng record nếu có
-        if (log.getRecords() != null && !log.getRecords().isEmpty()) {
-            for (var record : log.getRecords()) {
-                // Gán ngược DailyLog cho HealthRecord
+   @Override
+public DailyLog createLog(DailyLog log) {
+    // Gán log cho từng record nếu có
+    if (log.getRecords() != null && !log.getRecords().isEmpty()) {
+        for (var record : log.getRecords()) {
+            // Gán ngược DailyLog cho HealthRecord
+            record.setDailyLog(log);
+
+            // Nếu chưa có ID thì tạo tự động
+            if (record.getHealthRecordId() == null || record.getHealthRecordId().isEmpty()) {
+                record.setHealthRecordId(java.util.UUID.randomUUID().toString());
+            }
+        }
+    }
+
+    // Lưu DailyLog kèm records
+    return dailyLogRepo.save(log);
+}
+@Override
+public DailyLog updateLog(String id, DailyLog log) {
+    if (dailyLogRepo.existsById(id)) {
+        log.setLogId(id);
+
+        // Gán DailyLog cho mỗi record và tạo ID nếu cần
+        if (log.getRecords() != null) {
+            for (HealthRecord record : log.getRecords()) {
                 record.setDailyLog(log);
 
-                // Nếu chưa có ID thì tạo tự động
-                if (record.getHealthRecordId() == null || record.getHealthRecordId().isEmpty()) {
-                    record.setHealthRecordId(java.util.UUID.randomUUID().toString());
+                if (record.getHealthRecordId() == null || record.getHealthRecordId().isBlank()) {
+                    record.setHealthRecordId("HR" + UUID.randomUUID().toString().substring(0, 6));
                 }
             }
         }
 
-        // Lưu DailyLog kèm records
         return dailyLogRepo.save(log);
     }
+    return null;
+}
 
-    @Override
-    public DailyLog updateLog(String id, DailyLog log) {
-        if (dailyLogRepo.existsById(id)) {
-            log.setLogId(id);
-
-            // Gán DailyLog cho mỗi record và tạo ID nếu cần
-            if (log.getRecords() != null) {
-                for (HealthRecord record : log.getRecords()) {
-                    record.setDailyLog(log);
-
-                    if (record.getHealthRecordId() == null || record.getHealthRecordId().isBlank()) {
-                        record.setHealthRecordId("HR" + UUID.randomUUID().toString().substring(0, 6));
-                    }
-                }
-            }
-
-            return dailyLogRepo.save(log);
-        }
-        return null;
-    }
 
     @Override
     public void deleteLog(String id) {

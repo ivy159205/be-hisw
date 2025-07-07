@@ -41,6 +41,9 @@ public class User {
 public void setUserId(String userId) {
     this.userId = userId;
 }
+    public String getUserId() {
+        return userId;
+    }
     public String getUsername() {
     return username;
 }
