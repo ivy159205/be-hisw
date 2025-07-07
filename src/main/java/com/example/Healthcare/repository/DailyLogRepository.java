@@ -1,6 +1,6 @@
-package com.example.crudsqlserver.repository;
-import com.example.crudsqlserver.model.DailyLog;
-import com.example.crudsqlserver.model.User;
+package com.example.Healthcare.repository;
+import com.example.Healthcare.model.DailyLog;
+import com.example.Healthcare.model.User;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

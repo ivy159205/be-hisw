@@ -1,5 +1,5 @@
-package com.example.crudsqlserver.repository;
-import com.example.crudsqlserver.model.TargetDetail;
+package com.example.Healthcare.repository;
+import com.example.Healthcare.model.TargetDetail;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 public interface TargetDetailRepository extends JpaRepository<TargetDetail, String> {

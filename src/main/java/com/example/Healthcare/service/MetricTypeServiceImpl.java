@@ -1,7 +1,8 @@
-package com.example.crudsqlserver.service;
+package com.example.Healthcare.service;
 
-import com.example.crudsqlserver.model.MetricType;
-import com.example.crudsqlserver.repository.MetricTypeRepository;
+
+import com.example.Healthcare.model.MetricType;
+import com.example.Healthcare.repository.MetricTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

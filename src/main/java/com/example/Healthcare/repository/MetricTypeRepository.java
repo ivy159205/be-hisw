@@ -1,5 +1,5 @@
-package com.example.crudsqlserver.repository;
-import com.example.crudsqlserver.model.MetricType;
+package com.example.Healthcare.repository;
+import com.example.Healthcare.model.MetricType;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 public interface MetricTypeRepository extends JpaRepository<MetricType, String> {}

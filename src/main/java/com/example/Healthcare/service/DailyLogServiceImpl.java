@@ -1,10 +1,10 @@
-package com.example.crudsqlserver.service;
+package com.example.Healthcare.service;
 
 
-import com.example.crudsqlserver.model.DailyLog;
-import com.example.crudsqlserver.model.User;
-import com.example.crudsqlserver.repository.DailyLogRepository;
-import com.example.crudsqlserver.repository.UserRepository;
+import com.example.Healthcare.model.DailyLog;
+import com.example.Healthcare.model.User;
+import com.example.Healthcare.repository.DailyLogRepository;
+import com.example.Healthcare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

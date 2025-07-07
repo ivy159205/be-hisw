@@ -1,6 +1,6 @@
-package com.example.crudsqlserver.service;
+package com.example.Healthcare.service;
 
-import com.example.crudsqlserver.model.DailyLog;
+import com.example.Healthcare.model.DailyLog;
 
 import java.time.LocalDate;
 import java.util.List;

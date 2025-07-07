@@ -1,6 +1,6 @@
-package com.example.crudsqlserver.service;
+package com.example.Healthcare.service;
 
-import com.example.crudsqlserver.model.User;
+import com.example.Healthcare.model.User;
 
 import java.util.List;
 

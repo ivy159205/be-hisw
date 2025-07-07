@@ -1,6 +1,6 @@
-package com.example.crudsqlserver.service;
+package com.example.Healthcare.service;
 
-import com.example.crudsqlserver.model.MetricType;
+import com.example.Healthcare.model.MetricType;
 
 import java.util.List;
 

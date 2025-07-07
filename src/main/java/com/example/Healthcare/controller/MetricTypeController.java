@@ -1,15 +1,15 @@
-package com.example.crudsqlserver.controller;
+package com.example.Healthcare.controller;
 
 
-import com.example.crudsqlserver.model.MetricType;
-import com.example.crudsqlserver.service.MetricTypeService;
+import com.example.Healthcare.model.MetricType;
+import com.example.Healthcare.service.MetricTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/metrictypes")
+@RequestMapping("/api/metrics")
 public class MetricTypeController {
 
     @Autowired

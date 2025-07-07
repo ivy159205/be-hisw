@@ -1,7 +1,7 @@
-package com.example.crudsqlserver.controller;
+package com.example.Healthcare.controller;
 
-import com.example.crudsqlserver.model.User;
-import com.example.crudsqlserver.service.UserService;
+import com.example.Healthcare.model.User;
+import com.example.Healthcare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

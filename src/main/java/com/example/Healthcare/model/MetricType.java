@@ -1,24 +1,16 @@
-package com.example.crudsqlserver.model;
+package com.example.Healthcare.model;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "MetricType") 
-@Data // Lombok: Tự động tạo getters, setters, toString, equals, hashCode
-@NoArgsConstructor // Lombok: Tự động tạo constructor không tham số
-@AllArgsConstructor // Lombok: Tự động tạo constructor có tất cả tham số
 public class MetricType {
     @Id
     @Column(name = "metric_id")
     private String metricId;
-     
-    @Column(name = "[name]")
+     @Column(name = "[name]")
     private String name;
-
     @Column(name = "unit")
     private String unit;
 
@@ -27,4 +19,22 @@ public class MetricType {
 
     @OneToMany(mappedBy = "metricType")
     private List<TargetDetail> targetDetails;
+    // Getters/Setters
+public void setMetricId(String metricId) {
+    this.metricId = metricId;
+}
+        public String getName() {
+    return name;
+}
+
+public void setName(String name) {
+    this.name = name;
+}
+        public String getUnit() {
+    return unit;
+}
+
+public void setUnit(String unit) {
+    this.unit = unit;
+}
 }
