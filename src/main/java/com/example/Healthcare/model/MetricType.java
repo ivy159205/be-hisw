@@ -7,8 +7,9 @@ import java.util.List;
 public class MetricType {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // SỬA Ở ĐÂY: Dùng IDENTITY
     @Column(name = "metric_id")
-    private String metricId;
+    private Long metricId;
 
     @Column(name = "[name]")
     private String name;
@@ -23,11 +24,11 @@ public class MetricType {
     private List<TargetDetail> targetDetails;
 
     // ✅ Getters/Setters đúng
-    public String getMetricId() {
+    public Long getMetricId() {
         return metricId;
     }
 
-    public void setMetricId(String metricId) {
+    public void setMetricId(Long metricId) {
         this.metricId = metricId;
     }
 

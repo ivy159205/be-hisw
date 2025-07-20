@@ -10,8 +10,9 @@ import java.util.List;
 public class Target {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID tự động sinh
     @Column(name = "target_id")
-    private String targetId;
+    private Long targetId;
 
     @Column(name = "title")
     private String title;
@@ -35,11 +36,11 @@ public class Target {
 
     // Getters & Setters
 
-    public String getTargetId() {
+    public Long getTargetId() {
         return targetId;
     }
 
-    public void setTargetId(String targetId) {
+    public void setTargetId(Long targetId) {
         this.targetId = targetId;
     }
 

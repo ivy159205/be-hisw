@@ -26,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
         user.setPhoneNumber(req.phoneNumber);
         user.setGender(req.gender);
         user.setRole(req.role);
-        user.setDOB(req.dob);
+        user.setDob(req.dob);
 
         return userRepo.save(user);
     }

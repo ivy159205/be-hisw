@@ -9,8 +9,8 @@ public interface DailyLogService {
     
     List<DailyLog> getAllLogs();
     DailyLog getLogById(String id);
-    List<DailyLog> getLogsByUserId(String userId);
-    List<DailyLog> getLogsByUserIdAndDateRange(String userId, LocalDate start, LocalDate end);
+    List<DailyLog> getLogsByUserId(Long userId);
+    List<DailyLog> getLogsByUserIdAndDateRange(Long userId, LocalDate start, LocalDate end);
     DailyLog createLog(DailyLog log);
     DailyLog updateLog(String id, DailyLog log);
     void deleteLog(String id);

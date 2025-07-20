@@ -2,6 +2,12 @@ package com.example.Healthcare.repository;
 import com.example.Healthcare.model.Target;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-public interface TargetRepository extends JpaRepository<Target, String> {
-    List<Target> findByUserUserId(String userId);
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface TargetRepository extends JpaRepository<Target, Long> {
+    List<Target> findByUserUserId(Long userId);
+    // --- THÊM PHƯƠNG THỨC NÀY ---
+    long countByStatus(String status);
 }

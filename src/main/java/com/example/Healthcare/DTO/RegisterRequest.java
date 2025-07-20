@@ -3,7 +3,7 @@ package com.example.Healthcare.DTO;
 import java.time.LocalDate;
 // DTO để đăng ký
 public class RegisterRequest {
-    public String userId;
+    public Long userId;
     public String username;
     public String password;
     public String email;

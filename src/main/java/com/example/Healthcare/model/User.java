@@ -9,8 +9,9 @@ import java.util.List;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Hoặc GenerationType.SEQUENCE nếu bạn dùng sequence của DB
     @Column(name = "user_id")
-    private String userId;
+    private Long userId; // Thay đổi từ String sang Long
 
     @Column(name = "username")
     private String username;
@@ -36,61 +37,91 @@ public class User {
     // Quan hệ 1-n: Một User có nhiều DailyLog (nếu bạn cần dùng)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<DailyLog> dailyLogs;
+
+    // --- CONSTRUCTORS ---
+    public User() {}
+
+    // Constructor bỏ qua userId
+    public User(String username, String password, String email, String phoneNumber, String gender, String role, LocalDate dob) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.role = role;
+        this.dob = dob;
+    }
+
     // Getters và Setters
-    
-public void setUserId(String userId) {
-    this.userId = userId;
-}
-    public String getUserId() {
+    public Long getUserId() { // Trả về Long
         return userId;
     }
+
+    public void setUserId(Long userId) { // Set Long
+        this.userId = userId;
+    }
+
     public String getUsername() {
-    return username;
-}
+        return username;
+    }
 
-public void setUsername(String username) {
-    this.username = username;
-}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-public void setPassword(String password) {
-    this.password = password;
-}
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getPassword() {
-    return password;
-}
+        return password;
+    }
 
-public void setEmail(String email) {
-    this.email = email;
-}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getEmail() {
-    return email;
-}
+        return email;
+    }
 
-public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getPhoneNumber() {
-    return phoneNumber;
-}
-public void setGender(String gender) {
-    this.gender = gender;
-}
+        return phoneNumber;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public String getGender() {
-    return gender;
-}
+        return gender;
+    }
 
-public void setRole(String role) {
-    this.role = role;
-}
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String getRole() {
-    return role;
-}
+        return role;
+    }
+
     public LocalDate getDob() {
-    return dob;
-}
+        return dob;
+    }
 
-public void setDOB(LocalDate dob) {
-    this.dob = dob;
-}
+    public void setDob(LocalDate dob) { // Đổi tên phương thức cho đúng chuẩn Java: setDob thay vì setDOB
+        this.dob = dob;
+    }
 
+    public List<DailyLog> getDailyLogs() {
+        return dailyLogs;
+    }
+
+    public void setDailyLogs(List<DailyLog> dailyLogs) {
+        this.dailyLogs = dailyLogs;
+    }
 }

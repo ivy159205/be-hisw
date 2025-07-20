@@ -26,13 +26,13 @@ public class DailyLogController {
     }
 
     @GetMapping("/by-user/{userId}")
-    public List<DailyLog> getLogsByUserId(@PathVariable String userId) {
+    public List<DailyLog> getLogsByUserId(@PathVariable Long userId) {
         return dailyLogService.getLogsByUserId(userId);
     }
 
     @GetMapping("/by-user/{userId}/range")
     public List<DailyLog> getLogsByUserIdAndRange(
-            @PathVariable String userId,
+            @PathVariable Long userId,
             @RequestParam("start") String start,
             @RequestParam("end") String end) {
         return dailyLogService.getLogsByUserIdAndDateRange(userId, LocalDate.parse(start), LocalDate.parse(end));

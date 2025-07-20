@@ -5,8 +5,11 @@ import java.util.List;
 
 public interface TargetService {
     List<Target> getAllTargets();
-    Target getTargetById(String id);
+    Target getTargetById(Long id);
     Target createTarget(Target target);
-    Target updateTarget(String id, Target updatedTarget);
-    void deleteTarget(String id);
+    Target updateTarget(Long id, Target updatedTarget);
+    void deleteTarget(Long id);
+    List<Target> getTargetsByUserId(Long userId); // Thay String bằng Long
+    // --- THÊM PHƯƠNG THỨC NÀY ---
+    long countActiveTargets();
 }

@@ -20,7 +20,7 @@ public class MetricTypeServiceImpl implements MetricTypeService {
     }
 
     @Override
-    public MetricType getById(String id) {
+    public MetricType getById(Long id) {
         return metricRepo.findById(id).orElse(null);
     }
 
@@ -30,7 +30,7 @@ public class MetricTypeServiceImpl implements MetricTypeService {
     }
 
     @Override
-    public MetricType update(String id, MetricType metricType) {
+    public MetricType update(Long id, MetricType metricType) {
         if (metricRepo.existsById(id)) {
             metricType.setMetricId(id);
             return metricRepo.save(metricType);
@@ -39,7 +39,7 @@ public class MetricTypeServiceImpl implements MetricTypeService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         metricRepo.deleteById(id);
     }
 }

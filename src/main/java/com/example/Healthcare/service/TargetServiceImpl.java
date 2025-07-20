@@ -23,15 +23,13 @@ public class TargetServiceImpl implements TargetService {
     @Autowired
     private MetricTypeRepository metricTypeRepo;
 
-
-
     @Override
     public List<Target> getAllTargets() {
         return targetRepo.findAll();
     }
 
     @Override
-    public Target getTargetById(String id) {
+    public Target getTargetById(Long id) {
         return targetRepo.findById(id).orElse(null);
     }
 
@@ -52,7 +50,7 @@ public class TargetServiceImpl implements TargetService {
                 detail.setTarget(target);
 
                 if (detail.getMetricType() != null && detail.getMetricType().getMetricId() != null) {
-                    String metricId = detail.getMetricType().getMetricId();
+                    Long metricId = detail.getMetricType().getMetricId();
 
                     metricTypeRepo.findById(metricId).ifPresent(mt -> {
                         detail.setMetricType(mt);
@@ -66,30 +64,43 @@ public class TargetServiceImpl implements TargetService {
         return targetRepo.save(target);
     }
 
-@Override
-public Target updateTarget(String id, Target updatedTarget) {
-    return targetRepo.findById(id).map(existing -> {
-        existing.setTitle(updatedTarget.getTitle());
-        existing.setStatus(updatedTarget.getStatus());
-        existing.setStartDate(updatedTarget.getStartDate());
-        existing.setEndDate(updatedTarget.getEndDate());
-        existing.setUser(updatedTarget.getUser());
+    @Override
+    public Target updateTarget(Long id, Target updatedTarget) {
+        return targetRepo.findById(id).map(existing -> {
+            existing.setTitle(updatedTarget.getTitle());
+            existing.setStatus(updatedTarget.getStatus());
+            existing.setStartDate(updatedTarget.getStartDate());
+            existing.setEndDate(updatedTarget.getEndDate());
+            existing.setUser(updatedTarget.getUser());
 
-        // Cập nhật details an toàn
-        if (updatedTarget.getDetails() != null) {
-            existing.getDetails().clear();
-            for (TargetDetail detail : updatedTarget.getDetails()) {
-                detail.setTarget(existing);
-                existing.getDetails().add(detail);
+            // Cập nhật details an toàn
+            if (updatedTarget.getDetails() != null) {
+                existing.getDetails().clear();
+                for (TargetDetail detail : updatedTarget.getDetails()) {
+                    detail.setTarget(existing);
+                    existing.getDetails().add(detail);
+                }
             }
-        }
 
-        return targetRepo.save(existing);
-    }).orElse(null);
-}
+            return targetRepo.save(existing);
+        }).orElse(null);
+    }
 
     @Override
-    public void deleteTarget(String id) {
+    public void deleteTarget(Long id) {
         targetRepo.deleteById(id);
+    }
+
+    // --- TRIỂN KHAI PHƯƠNG THỨC NÀY ---
+    @Override
+    public long countActiveTargets() {
+        // Sử dụng phương thức tìm kiếm được đặt tên (derived query method)
+        // Spring Data JPA sẽ tự động tạo truy vấn cho bạn
+        return targetRepo.countByStatus("In Progress");
+    }
+
+    @Override
+    public List<Target> getTargetsByUserId(Long userId) {
+        return targetRepo.findByUserUserId(userId);
     }
 }

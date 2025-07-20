@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/metrics")
+@CrossOrigin(origins = "*") // Hoặc "http://127.0.0.1:5500" nếu bạn muốn cụ thể
 public class MetricTypeController {
 
     @Autowired
@@ -21,7 +22,7 @@ public class MetricTypeController {
     }
 
     @GetMapping("/{id}")
-    public MetricType getMetricById(@PathVariable String id) {
+    public MetricType getMetricById(@PathVariable Long id) {
         return metricService.getById(id);
     }
 
@@ -31,12 +32,12 @@ public class MetricTypeController {
     }
 
     @PutMapping("/{id}")
-    public MetricType updateMetric(@PathVariable String id, @RequestBody MetricType metricType) {
+    public MetricType updateMetric(@PathVariable Long id, @RequestBody MetricType metricType) {
         return metricService.update(id, metricType);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMetric(@PathVariable String id) {
+    public void deleteMetric(@PathVariable Long id) {
         metricService.delete(id);
     }
 }

@@ -1,4 +1,5 @@
 package com.example.Healthcare.model;
+
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -7,8 +8,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class TargetDetail {
 
     @Id
-    @Column(name = "detail_id")
-    private String detailId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "detail_id") // THÊM DÒNG NÀY ĐỂ ÁNH XẠ ĐÚNG TÊN CỘT TRONG DB
+    private Long detailId; // ĐÃ SỬA: Thay đổi kiểu dữ liệu từ String sang Long
 
     @Column(name = "comparison_type")
     private String comparisonType;
@@ -19,22 +21,36 @@ public class TargetDetail {
     @Column(name = "aggregation_type")
     private String aggregationType;
 
-    @ManyToOne
-    @JoinColumn(name = "target_id")
+    @ManyToOne(fetch = FetchType.LAZY) // Thêm fetch type cho mối quan hệ
+    @JoinColumn(name = "target_id", referencedColumnName = "target_id") // Đảm bảo đúng tên cột và tên tham chiếu
     @JsonBackReference
     private Target target;
 
-    @ManyToOne
-    @JoinColumn(name = "metric_id")
+    @ManyToOne(fetch = FetchType.LAZY) // Thêm fetch type cho mối quan hệ
+    @JoinColumn(name = "metric_id", referencedColumnName = "metric_id") // Đảm bảo đúng tên cột và tên tham chiếu
     private MetricType metricType;
+
+    // Constructors (nên có một constructor không tham số)
+    public TargetDetail() {
+    }
+
+    // Constructors with fields (có thể thêm nếu cần)
+    public TargetDetail(String comparisonType, Double targetValue, String aggregationType, Target target,
+            MetricType metricType) {
+        this.comparisonType = comparisonType;
+        this.targetValue = targetValue;
+        this.aggregationType = aggregationType;
+        this.target = target;
+        this.metricType = metricType;
+    }
 
     // --- Getters & Setters ---
 
-    public String getDetailId() {
+    public Long getDetailId() { // ĐÃ SỬA: Kiểu trả về là Long
         return detailId;
     }
 
-    public void setDetailId(String detailId) {
+    public void setDetailId(Long detailId) { // ĐÃ SỬA: Kiểu tham số là Long
         this.detailId = detailId;
     }
 

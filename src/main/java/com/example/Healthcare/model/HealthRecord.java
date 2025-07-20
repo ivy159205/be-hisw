@@ -9,8 +9,9 @@ import jakarta.persistence.*;
 public class HealthRecord {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // SỬA Ở ĐÂY: Dùng IDENTITY
     @Column(name = "health_record_id")
-    private String healthRecordId;
+    private Long healthRecordId;
 
     @Column(name = "[value]") // dùng [] vì 'value' là từ khóa
     private Double value;
@@ -21,16 +22,16 @@ public class HealthRecord {
     private DailyLog dailyLog;
 
     @ManyToOne
-    @JoinColumn(name = "metric_type_id")
+    @JoinColumn(name = "metric_id")
     private MetricType metricType;
 
     // Getters and Setters
 
-    public String getHealthRecordId() {
+    public Long getHealthRecordId() {
         return healthRecordId;
     }
 
-    public void setHealthRecordId(String healthRecordId) {
+    public void setHealthRecordId(Long healthRecordId) {
         this.healthRecordId = healthRecordId;
     }
 
