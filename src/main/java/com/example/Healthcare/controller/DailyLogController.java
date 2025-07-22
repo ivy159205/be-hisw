@@ -4,12 +4,12 @@ import com.example.Healthcare.model.DailyLog;
 import com.example.Healthcare.service.DailyLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/dailylogs")
+@CrossOrigin("*")
 public class DailyLogController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class DailyLogController {
     }
 
     @GetMapping("/{id}")
-    public DailyLog getLogById(@PathVariable String id) {
+    public DailyLog getLogById(@PathVariable Long id) { // << THAY ĐỔI: String -> Long
         return dailyLogService.getLogById(id);
     }
 
@@ -44,12 +44,12 @@ public class DailyLogController {
     }
 
     @PutMapping("/{id}")
-    public DailyLog updateLog(@PathVariable String id, @RequestBody DailyLog log) {
+    public DailyLog updateLog(@PathVariable Long id, @RequestBody DailyLog log) { // << THAY ĐỔI: String -> Long
         return dailyLogService.updateLog(id, log);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLog(@PathVariable String id) {
+    public void deleteLog(@PathVariable Long id) { // << THAY ĐỔI: String -> Long
         dailyLogService.deleteLog(id);
     }
 }

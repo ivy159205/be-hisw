@@ -7,7 +7,6 @@ import com.example.Healthcare.repository.DailyLogRepository;
 import com.example.Healthcare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class DailyLogServiceImpl implements DailyLogService {
     }
 
     @Override
-    public DailyLog getLogById(String id) {
+    public DailyLog getLogById(Long id) { // << THAY ĐỔI: String -> Long
         return dailyLogRepo.findById(id).orElse(null);
     }
 
@@ -50,37 +49,32 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     @Override
     public DailyLog createLog(DailyLog log) {
-        // Gán log cho từng record nếu có
+        // ID sẽ được tự động tạo bởi database, không cần set ở đây.
         if (log.getRecords() != null && !log.getRecords().isEmpty()) {
             for (var record : log.getRecords()) {
-                // Gán ngược DailyLog cho HealthRecord
                 record.setDailyLog(log);
             }
         }
-
-        // Lưu DailyLog kèm records
         return dailyLogRepo.save(log);
     }
 
     @Override
-    public DailyLog updateLog(String id, DailyLog log) {
+    public DailyLog updateLog(Long id, DailyLog log) { // << THAY ĐỔI: String -> Long
         if (dailyLogRepo.existsById(id)) {
-            log.setLogId(id);
+            log.setLogId(id); // Gán ID cho đối tượng để JPA biết đây là lệnh update
 
-            // Gán DailyLog cho mỗi record và tạo ID nếu cần
             if (log.getRecords() != null) {
                 for (HealthRecord record : log.getRecords()) {
                     record.setDailyLog(log);
                 }
             }
-
             return dailyLogRepo.save(log);
         }
         return null;
     }
 
     @Override
-    public void deleteLog(String id) {
+    public void deleteLog(Long id) { // << THAY ĐỔI: String -> Long
         dailyLogRepo.deleteById(id);
     }
 }
