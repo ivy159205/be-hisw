@@ -14,7 +14,7 @@ CREATE TABLE [User](
 );
 
 CREATE TABLE DailyLog(
-	log_id NVARCHAR(255) PRIMARY KEY,
+	log_id INT IDENTITY(1, 1) PRIMARY KEY,
 	[user_id] INT,
 	log_date DATE,
 	note NVARCHAR(255),
@@ -29,7 +29,7 @@ CREATE TABLE MetricType(
 
 CREATE TABLE HealthRecord(
 	health_record_id INT IDENTITY(1,1) PRIMARY KEY, -- Đã đổi thành INT IDENTITY(1,1)
-	[log_id] NVARCHAR(255),
+	[log_id] INT,
 	metric_id INT,
 	[value] NVARCHAR(255),
 	FOREIGN KEY([log_id]) REFERENCES [DailyLog]([log_id]),
