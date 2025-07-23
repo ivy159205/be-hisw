@@ -3,6 +3,8 @@ package com.example.Healthcare.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore; // Import dòng này
+
 
 @Entity
 @Table(name = "[User]") // SQL Server dùng [User] vì "User" là từ khóa
@@ -34,8 +36,9 @@ public class User {
     @Column(name = "dob")
     private LocalDate dob;
 
-    // Quan hệ 1-n: Một User có nhiều DailyLog (nếu bạn cần dùng)
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    // SỬA LẠI CHỖ NÀY
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // <-- Dùng @JsonIgnore đơn giản và an toàn hơn
     private List<DailyLog> dailyLogs;
 
     // --- CONSTRUCTORS ---

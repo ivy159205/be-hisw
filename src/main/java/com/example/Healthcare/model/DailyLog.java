@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "DailyLog")
@@ -19,12 +20,13 @@ public class DailyLog {
     @Column(name = "note")
     private String note;
 
-    @ManyToOne
+    // Giữ LAZY để tối ưu, không cần annotation JSON ở đây
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "user_id")
     private User user;
 
+    // Quan hệ này có thể giữ lại hoặc bỏ annotation JSON tùy vào bạn có cần trả về health records không
     @OneToMany(mappedBy = "dailyLog", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<HealthRecord> records;
 
     // Getters and Setters

@@ -1,5 +1,6 @@
 package com.example.Healthcare.controller;
 
+import com.example.Healthcare.DTO.HealthRecordDTO; // SỬA: Import DTO
 import com.example.Healthcare.model.HealthRecord;
 import com.example.Healthcare.service.HealthRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,44 +9,56 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/healthrecords")
-@CrossOrigin(origins = "*") // Hoặc "http://127.0.0.1:5500" nếu bạn muốn cụ thể
+@CrossOrigin(origins = "*")
 public class HealthRecordController {
 
     @Autowired
     private HealthRecordService healthRecordService;
 
+    @GetMapping
+    // SỬA: Trả về List<HealthRecordDTO>
+    public List<HealthRecordDTO> getAllHealthRecords() {
+        return healthRecordService.getAllHealthRecordsAsDTO();
+    }
+
+    @GetMapping("/{id}")
+    // SỬA: Trả về ResponseEntity<HealthRecordDTO> và gọi đúng service
+    public ResponseEntity<HealthRecordDTO> getHealthRecordById(@PathVariable Long id) {
+        HealthRecordDTO dto = healthRecordService.getHealthRecordByIdAsDTO(id);
+        if (dto != null) {
+            return ResponseEntity.ok(dto);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping
-    public ResponseEntity<HealthRecord> createHealthRecord(@RequestBody HealthRecord healthRecord) {
-        HealthRecord createdRecord = healthRecordService.createHealthRecord(healthRecord);
-        return new ResponseEntity<>(createdRecord, HttpStatus.CREATED);
+    // SỬA: Trả về ResponseEntity<HealthRecordDTO> và gọi đúng service
+    public ResponseEntity<HealthRecordDTO> createHealthRecord(@RequestBody HealthRecord healthRecord) {
+        HealthRecordDTO createdDto = healthRecordService.createHealthRecordAsDTO(healthRecord);
+        return new ResponseEntity<>(createdDto, HttpStatus.CREATED);
+    }
+    
+    // THÊM: Endpoint PUT để cập nhật
+    @PutMapping("/{id}")
+    public ResponseEntity<HealthRecordDTO> updateHealthRecord(@PathVariable Long id, @RequestBody HealthRecord healthRecordDetails) {
+        HealthRecordDTO updatedDto = healthRecordService.updateHealthRecordAsDTO(id, healthRecordDetails);
+        if (updatedDto != null) {
+            return ResponseEntity.ok(updatedDto);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteHealthRecord(@PathVariable Long id) {
         healthRecordService.deleteHealthRecord(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
-    // Thêm endpoint GET cho count:
     @GetMapping("/count")
     public long countHealthRecords() {
         return healthRecordService.countHealthRecords();
     }
-
-    // Các endpoint khác nếu cần (ví dụ để hiển thị danh sách HealthRecord)
-    @GetMapping
-    public List<HealthRecord> getAllHealthRecords() {
-        return healthRecordService.getAllHealthRecords();
-    }
-
-    // @GetMapping("/{id}")
-    // public ResponseEntity<HealthRecord> getHealthRecordById(@PathVariable Long id) {
-    //     Optional<HealthRecord> record = healthRecordService.getHealthRecordById(id);
-    //     return record.map(ResponseEntity::ok)
-    //                  .orElseGet(() -> ResponseEntity.notFound().build());
-    // }
 }

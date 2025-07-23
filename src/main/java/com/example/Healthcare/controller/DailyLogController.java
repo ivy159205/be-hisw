@@ -1,5 +1,6 @@
 package com.example.Healthcare.controller;
 
+import com.example.Healthcare.DTO.DailyLogDTO; // <-- Import DTO
 import com.example.Healthcare.model.DailyLog;
 import com.example.Healthcare.service.DailyLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,12 @@ public class DailyLogController {
     private DailyLogService dailyLogService;
 
     @GetMapping
-    public List<DailyLog> getAllLogs() {
+    public List<DailyLogDTO> getAllLogs() { // <-- THAY ĐỔI KIỂU TRẢ VỀ
         return dailyLogService.getAllLogs();
     }
 
     @GetMapping("/{id}")
-    public DailyLog getLogById(@PathVariable Long id) { // << THAY ĐỔI: String -> Long
+    public DailyLogDTO getLogById(@PathVariable Long id) { // <-- THAY ĐỔI KIỂU TRẢ VỀ
         return dailyLogService.getLogById(id);
     }
 
@@ -39,15 +40,15 @@ public class DailyLogController {
     }
 
     @PostMapping
-    public DailyLog createLog(@RequestBody DailyLog log) {
+    public DailyLogDTO createLog(@RequestBody DailyLog log) { // <-- SỬA KIỂU TRẢ VỀ
         return dailyLogService.createLog(log);
     }
 
     @PutMapping("/{id}")
-    public DailyLog updateLog(@PathVariable Long id, @RequestBody DailyLog log) { // << THAY ĐỔI: String -> Long
+    public DailyLogDTO updateLog(@PathVariable Long id, @RequestBody DailyLog log) { // <-- SỬA KIỂU TRẢ VỀ
         return dailyLogService.updateLog(id, log);
     }
-
+    
     @DeleteMapping("/{id}")
     public void deleteLog(@PathVariable Long id) { // << THAY ĐỔI: String -> Long
         dailyLogService.deleteLog(id);

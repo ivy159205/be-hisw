@@ -14,7 +14,7 @@ public class HealthRecord {
     private Long healthRecordId;
 
     @Column(name = "[value]") // dùng [] vì 'value' là từ khóa
-    private Double value;
+    private String value;
 
     @ManyToOne
     @JoinColumn(name = "log_id")
@@ -35,11 +35,11 @@ public class HealthRecord {
         this.healthRecordId = healthRecordId;
     }
 
-    public Double getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

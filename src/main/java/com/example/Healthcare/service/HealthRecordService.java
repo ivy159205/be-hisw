@@ -1,13 +1,18 @@
 package com.example.Healthcare.service;
 
+import com.example.Healthcare.DTO.HealthRecordDTO; // SỬA: Import DTO
 import com.example.Healthcare.model.HealthRecord;
 import java.util.List;
 
 public interface HealthRecordService {
-    List<HealthRecord> getAllHealthRecords();
-    HealthRecord getHealthRecordById(Long id);
-    HealthRecord createHealthRecord(HealthRecord healthRecord);
-    HealthRecord updateHealthRecord(Long id, HealthRecord healthRecord);
+
+    // Các phương thức trả về DTO cho Controller
+    List<HealthRecordDTO> getAllHealthRecordsAsDTO();
+    HealthRecordDTO getHealthRecordByIdAsDTO(Long id);
+    HealthRecordDTO createHealthRecordAsDTO(HealthRecord healthRecord);
+    HealthRecordDTO updateHealthRecordAsDTO(Long id, HealthRecord healthRecordDetails);
+    
+    // Các phương thức nội bộ hoặc không trả về cho API có thể giữ nguyên
     void deleteHealthRecord(Long id);
-    long countHealthRecords(); // Thêm phương thức này
+    long countHealthRecords();
 }

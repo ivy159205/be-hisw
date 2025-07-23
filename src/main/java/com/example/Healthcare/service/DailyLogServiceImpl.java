@@ -1,5 +1,6 @@
 package com.example.Healthcare.service;
 
+import com.example.Healthcare.DTO.DailyLogDTO; // Import DTO
 import com.example.Healthcare.model.DailyLog;
 import com.example.Healthcare.model.HealthRecord;
 import com.example.Healthcare.model.User;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional; // Thêm import này
+import java.util.stream.Collectors;
 
 @Service
 public class DailyLogServiceImpl implements DailyLogService {
@@ -19,14 +22,35 @@ public class DailyLogServiceImpl implements DailyLogService {
     @Autowired
     private UserRepository userRepo;
 
+    // HÀM HELPER ĐỂ CHUYỂN ĐỔI
+    private DailyLogDTO convertToDto(DailyLog log) {
+        Long userId = (log.getUser() != null) ? log.getUser().getUserId() : null;
+        String username = (log.getUser() != null) ? log.getUser().getUsername() : "Không xác định";
+
+        return new DailyLogDTO(
+            log.getLogId(),
+            log.getLogDate().toString(),
+            log.getNote(),
+            userId,
+            username
+        );
+    }
+    
     @Override
-    public List<DailyLog> getAllLogs() {
-        return dailyLogRepo.findAll();
+    @Transactional(readOnly = true) // Cần Transactional để LAZY loading hoạt động
+    public List<DailyLogDTO> getAllLogs() {
+        return dailyLogRepo.findAll()
+                .stream()
+                .map(this::convertToDto) // Chuyển mỗi DailyLog thành DailyLogDTO
+                .collect(Collectors.toList());
     }
 
     @Override
-    public DailyLog getLogById(Long id) { // << THAY ĐỔI: String -> Long
-        return dailyLogRepo.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public DailyLogDTO getLogById(Long id) {
+        return dailyLogRepo.findById(id)
+                .map(this::convertToDto) // Chuyển đổi nếu tìm thấy
+                .orElse(null);
     }
 
     @Override
@@ -48,29 +72,25 @@ public class DailyLogServiceImpl implements DailyLogService {
     }
 
     @Override
-    public DailyLog createLog(DailyLog log) {
-        // ID sẽ được tự động tạo bởi database, không cần set ở đây.
-        if (log.getRecords() != null && !log.getRecords().isEmpty()) {
-            for (var record : log.getRecords()) {
-                record.setDailyLog(log);
-            }
-        }
-        return dailyLogRepo.save(log);
+    @Transactional // Thêm annotation này
+    public DailyLogDTO createLog(DailyLog log) {
+        // ... logic của bạn để thiết lập quan hệ
+        DailyLog savedLog = dailyLogRepo.save(log); // Lưu vào DB
+        return convertToDto(savedLog); // Trả về DTO
     }
 
     @Override
-    public DailyLog updateLog(Long id, DailyLog log) { // << THAY ĐỔI: String -> Long
+    @Transactional // Thêm annotation này
+    public DailyLogDTO updateLog(Long id, DailyLog log) {
         if (dailyLogRepo.existsById(id)) {
-            log.setLogId(id); // Gán ID cho đối tượng để JPA biết đây là lệnh update
-
-            if (log.getRecords() != null) {
-                for (HealthRecord record : log.getRecords()) {
-                    record.setDailyLog(log);
-                }
-            }
-            return dailyLogRepo.save(log);
+            log.setLogId(id);
+            
+            // ... logic của bạn
+            
+            DailyLog updatedLog = dailyLogRepo.save(log); // Lưu vào DB
+            return convertToDto(updatedLog); // Trả về DTO
         }
-        return null;
+        return null; 
     }
 
     @Override
