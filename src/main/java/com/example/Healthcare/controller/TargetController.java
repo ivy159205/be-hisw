@@ -1,5 +1,6 @@
 package com.example.Healthcare.controller;
 
+import com.example.Healthcare.DTO.TargetDto;
 import com.example.Healthcare.model.Target;
 import com.example.Healthcare.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,12 @@ public class TargetController {
     }
 
     // Endpoint mới hoặc sửa đổi để lấy target theo user ID
-    @GetMapping("/user/{userId}")
-    public List<Target> getTargetsByUserId(@PathVariable Long userId) { // Thay String bằng Long
-        return targetService.getTargetsByUserId(userId);
-    }
+@GetMapping("/user/{userId}")
+public ResponseEntity<List<TargetDto>> getTargetsByUserId(@PathVariable Long userId) {
+    List<TargetDto> targets = targetService.getTargetDTOsByUserId(userId);
+    return ResponseEntity.ok(targets);
+}
+
 
     // --- THÊM ENDPOINT NÀY ---
     @GetMapping("/active/count")

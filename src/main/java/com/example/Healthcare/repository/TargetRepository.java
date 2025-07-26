@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TargetRepository extends JpaRepository<Target, Long> {
-    List<Target> findByUserUserId(Long userId);
-    // --- THÊM PHƯƠNG THỨC NÀY ---
-    long countByStatus(String status);
+  List<Target> findByUserUserId(Long userId);
+long countByStatus(String status);
+
 }

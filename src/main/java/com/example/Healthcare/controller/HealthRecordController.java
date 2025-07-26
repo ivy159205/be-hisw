@@ -33,7 +33,11 @@ public class HealthRecordController {
         }
         return ResponseEntity.notFound().build();
     }
-
+    @GetMapping("/user/{userId}")
+public ResponseEntity<List<HealthRecordDTO>> getHealthRecordsByUserId(@PathVariable Long userId) {
+    List<HealthRecordDTO> records = healthRecordService.getHealthRecordsByUserId(userId);
+    return ResponseEntity.ok(records);
+}
     @PostMapping
     // SỬA: Trả về ResponseEntity<HealthRecordDTO> và gọi đúng service
     public ResponseEntity<HealthRecordDTO> createHealthRecord(@RequestBody HealthRecord healthRecord) {

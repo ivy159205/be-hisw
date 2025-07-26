@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HealthRecordRepository extends JpaRepository<HealthRecord, Long> {
     List<HealthRecord> findByDailyLogLogId(Long logId);
+    List<HealthRecord> findByDailyLog_User_UserId(Long userId);
 }

@@ -2,7 +2,11 @@ package com.example.Healthcare.service;
 
 import com.example.Healthcare.model.Target;
 import com.example.Healthcare.model.TargetDetail;
+import com.example.Healthcare.DTO.TargetDto;
+import com.example.Healthcare.DTO.TargetDetailDto;
 
+
+import java.util.stream.Collectors;
 import com.example.Healthcare.repository.TargetRepository;
 import com.example.Healthcare.repository.UserRepository;
 import com.example.Healthcare.repository.MetricTypeRepository;
@@ -99,8 +103,32 @@ public class TargetServiceImpl implements TargetService {
         return targetRepo.countByStatus("In Progress");
     }
 
-    @Override
-    public List<Target> getTargetsByUserId(Long userId) {
-        return targetRepo.findByUserUserId(userId);
-    }
+   @Override
+public List<TargetDto> getTargetDTOsByUserId(Long userId) {
+    List<Target> targets = targetRepo.findByUserUserId(userId);
+
+    return targets.stream().map(this::convertToDto).collect(Collectors.toList());
+}
+
+private TargetDto convertToDto(Target target) {
+    TargetDto dto = new TargetDto();
+    dto.setTargetId(target.getTargetId());
+    dto.setTitle(target.getTitle());
+    dto.setStatus(target.getStatus());
+    dto.setStartDate(target.getStartDate());
+    dto.setEndDate(target.getEndDate());
+    dto.setUserId(target.getUser().getUserId());
+
+    List<TargetDetailDto> detailDtos = target.getDetails().stream().map(detail -> {
+        TargetDetailDto d = new TargetDetailDto();
+        d.setId(detail.getDetailId());
+        d.setMetricId(detail.getMetricType().getMetricId());
+        d.setTargetValue(detail.getTargetValue());
+        return d;
+    }).collect(Collectors.toList());
+
+    dto.setDetails(detailDtos);
+    return dto;
+}
+
 }

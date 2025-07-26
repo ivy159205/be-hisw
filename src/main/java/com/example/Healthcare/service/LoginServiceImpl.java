@@ -48,4 +48,14 @@ public class LoginServiceImpl implements LoginService {
     public String generateTokenForUser(User user) {
         return jwtUtil.generateToken(user.getEmail(), user.getRole());
     }
+
+    @Override
+    public void resetPassword(String email, String newPassword) {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Email not found"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+    }
+
 }

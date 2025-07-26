@@ -11,7 +11,8 @@ public interface HealthRecordService {
     HealthRecordDTO getHealthRecordByIdAsDTO(Long id);
     HealthRecordDTO createHealthRecordAsDTO(HealthRecord healthRecord);
     HealthRecordDTO updateHealthRecordAsDTO(Long id, HealthRecord healthRecordDetails);
-    
+    List<HealthRecordDTO> getHealthRecordsByUserId(Long userId);
+
     // Các phương thức nội bộ hoặc không trả về cho API có thể giữ nguyên
     void deleteHealthRecord(Long id);
     long countHealthRecords();

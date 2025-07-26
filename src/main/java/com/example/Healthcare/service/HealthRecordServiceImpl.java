@@ -47,6 +47,14 @@ public class HealthRecordServiceImpl implements HealthRecordService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
+   @Override
+@Transactional(readOnly = true)
+public List<HealthRecordDTO> getHealthRecordsByUserId(Long userId) {
+    return healthRecordRepository.findByDailyLog_User_UserId(userId)
+            .stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
+}
 
     @Override
     @Transactional(readOnly = true) // SỬA: Thêm transactional và trả về DTO
@@ -62,7 +70,7 @@ public class HealthRecordServiceImpl implements HealthRecordService {
         HealthRecord savedRecord = healthRecordRepository.save(healthRecord);
         return convertToDto(savedRecord);
     }
-
+    
     @Override
     @Transactional // SỬA: Thêm transactional và trả về DTO
     public HealthRecordDTO updateHealthRecordAsDTO(Long id, HealthRecord healthRecordDetails) {
