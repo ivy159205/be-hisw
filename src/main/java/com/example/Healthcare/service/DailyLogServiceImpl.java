@@ -2,7 +2,6 @@ package com.example.Healthcare.service;
 
 import com.example.Healthcare.DTO.DailyLogDTO; // Import DTO
 import com.example.Healthcare.model.DailyLog;
-import com.example.Healthcare.model.HealthRecord;
 import com.example.Healthcare.model.User;
 import com.example.Healthcare.repository.DailyLogRepository;
 import com.example.Healthcare.repository.UserRepository;

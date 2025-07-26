@@ -1,13 +1,11 @@
 package com.example.Healthcare.DTO;
 
-import com.example.Healthcare.model.User;
-
 public class LoginResponse {
     public String message;
-    public User user;
+    public String token;
 
-    public LoginResponse(String message, User user) {
+    public LoginResponse(String message, String token) {
         this.message = message;
-        this.user = user;
+        this.token = token;
     }
 }

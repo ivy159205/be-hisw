@@ -3,7 +3,9 @@ package com.example.Healthcare.service;
 import com.example.Healthcare.model.User;
 import com.example.Healthcare.DTO.RegisterRequest;
 import com.example.Healthcare.repository.LoginRepository;
+import com.example.Healthcare.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +14,12 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private LoginRepository userRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Override
     public User register(RegisterRequest req) {
         if (userRepo.findByEmail(req.email).isPresent()) {
@@ -19,13 +27,12 @@ public class LoginServiceImpl implements LoginService {
         }
 
         User user = new User();
-        user.setUserId(req.userId);
         user.setUsername(req.username);
-        user.setPassword(req.password);
+        user.setPassword(passwordEncoder.encode(req.password)); // Mã hoá mật khẩu
         user.setEmail(req.email);
         user.setPhoneNumber(req.phoneNumber);
         user.setGender(req.gender);
-        user.setRole(req.role);
+        user.setRole(req.role == null ? "user" : req.role); // Gán mặc định nếu thiếu
         user.setDob(req.dob);
 
         return userRepo.save(user);
@@ -34,7 +41,11 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public User login(String email, String password) {
         return userRepo.findByEmail(email)
-                .filter(user -> user.getPassword().equals(password))
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+    }
+
+    public String generateTokenForUser(User user) {
+        return jwtUtil.generateToken(user.getEmail(), user.getRole());
     }
 }

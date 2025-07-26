@@ -3,8 +3,6 @@ package com.example.Healthcare.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "DailyLog")
