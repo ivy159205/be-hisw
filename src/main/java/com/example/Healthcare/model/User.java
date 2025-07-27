@@ -3,25 +3,24 @@ package com.example.Healthcare.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore; // Import dòng này
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "[User]") // SQL Server dùng [User] vì "User" là từ khóa
+@Table(name = "[User]") // SQL Server cần dùng [User]
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Hoặc GenerationType.SEQUENCE nếu bạn dùng sequence của DB
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long userId; // Thay đổi từ String sang Long
+    private Long userId;
 
     @Column(name = "username")
     private String username;
 
-    @Column(name = "password") // "password" là từ khóa → phải map rõ ràng
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "phone_number")
@@ -36,16 +35,21 @@ public class User {
     @Column(name = "dob")
     private LocalDate dob;
 
-    // SỬA LẠI CHỖ NÀY
+    @Column(name = "weight")
+    private Double weight;
+
+    @Column(name = "height")
+    private Double height;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore // <-- Dùng @JsonIgnore đơn giản và an toàn hơn
+    @JsonIgnore
     private List<DailyLog> dailyLogs;
 
     // --- CONSTRUCTORS ---
+
     public User() {}
 
-    // Constructor bỏ qua userId
-    public User(String username, String password, String email, String phoneNumber, String gender, String role, LocalDate dob) {
+    public User(String username, String password, String email, String phoneNumber, String gender, String role, LocalDate dob, Double weight, Double height) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -53,14 +57,17 @@ public class User {
         this.gender = gender;
         this.role = role;
         this.dob = dob;
+        this.weight = weight;
+        this.height = height;
     }
 
-    // Getters và Setters
-    public Long getUserId() { // Trả về Long
+    // --- GETTERS & SETTERS ---
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) { // Set Long
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -72,52 +79,68 @@ public class User {
         this.username = username;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getGender() {
         return gender;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getRole() {
         return role;
     }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(LocalDate dob) { // Đổi tên phương thức cho đúng chuẩn Java: setDob thay vì setDOB
+    public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getHeight() {
+        return height;
+    }
+
+    public void setHeight(Double height) {
+        this.height = height;
     }
 
     public List<DailyLog> getDailyLogs() {

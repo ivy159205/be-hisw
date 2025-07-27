@@ -56,3 +56,7 @@ CREATE TABLE TargetDetail(
 	FOREIGN KEY(target_id) REFERENCES [Target](target_id),
 	FOREIGN KEY(metric_id) REFERENCES MetricType(metric_id)
 );
+
+ALTER TABLE [User]
+ADD weight FLOAT,
+    height FLOAT;
