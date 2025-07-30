@@ -8,10 +8,9 @@ public class TargetDto {
     private Long targetId;
     private String title;
     private String status;
-    private LocalDate  startDate;
-    private LocalDate  endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Long userId;
     private List<TargetDetailDto> details;
-
-    // Getters và Setters
 }
+

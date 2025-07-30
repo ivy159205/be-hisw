@@ -12,9 +12,10 @@ public class JwtUtil {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long expirationMs = 86400000; // 1 ngày
 
-    public String generateToken(String email, String role) {
+    public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("userId", userId)
                 .claim("role", "ROLE_" + role.toUpperCase())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
@@ -32,6 +33,16 @@ public class JwtUtil {
                 .parseClaimsJws(token).getBody().get("role");
     }
 
+    public Long getUserIdFromToken(String token) {
+        Object idClaim = Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody().get("userId");
+
+        if (idClaim instanceof Integer) {
+            return ((Integer) idClaim).longValue(); // Trường hợp userId là kiểu int
+        }
+        return (Long) idClaim; // Nếu đã là Long
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -41,4 +52,3 @@ public class JwtUtil {
         }
     }
 }
-

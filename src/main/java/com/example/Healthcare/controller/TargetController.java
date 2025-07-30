@@ -47,12 +47,11 @@ public class TargetController {
     }
 
     // Endpoint mới hoặc sửa đổi để lấy target theo user ID
-@GetMapping("/user/{userId}")
-public ResponseEntity<List<TargetDto>> getTargetsByUserId(@PathVariable Long userId) {
-    List<TargetDto> targets = targetService.getTargetDTOsByUserId(userId);
-    return ResponseEntity.ok(targets);
-}
-
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TargetDto>> getTargetsByUserId(@PathVariable Long userId) {
+        List<TargetDto> targets = targetService.getTargetDTOsByUserId(userId);
+        return ResponseEntity.ok(targets);
+    }
 
     // --- THÊM ENDPOINT NÀY ---
     @GetMapping("/active/count")

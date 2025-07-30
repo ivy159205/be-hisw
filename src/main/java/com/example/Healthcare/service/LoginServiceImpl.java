@@ -46,7 +46,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     public String generateTokenForUser(User user) {
-        return jwtUtil.generateToken(user.getEmail(), user.getRole());
+        return jwtUtil.generateToken(user.getUserId() ,user.getEmail(), user.getRole());
     }
 
     @Override

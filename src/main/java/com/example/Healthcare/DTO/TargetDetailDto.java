@@ -2,9 +2,9 @@ package com.example.Healthcare.DTO;
 import lombok.Data;
 @Data
 public class TargetDetailDto {
-    private Long id;
+    private Long tdetailId; 
     private Long metricId;
+    private String comparisonType;
     private Double targetValue;
-
-    // Getters và Setters
+    private String aggregationType;
 }

@@ -1,7 +1,5 @@
 package com.example.Healthcare.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -16,14 +14,13 @@ public class HealthRecord {
     @Column(name = "[value]") // dùng [] vì 'value' là từ khóa
     private String value;
 
-    @ManyToOne
-    @JoinColumn(name = "log_id")
-    @JsonBackReference
-    private DailyLog dailyLog;
+   @ManyToOne(fetch = FetchType.EAGER)
+@JoinColumn(name = "metric_id")
+private MetricType metricType;
 
-    @ManyToOne
-    @JoinColumn(name = "metric_id")
-    private MetricType metricType;
+@ManyToOne(fetch = FetchType.EAGER)
+@JoinColumn(name = "log_id")
+private DailyLog dailyLog;
 
     // Getters and Setters
 

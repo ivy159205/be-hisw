@@ -12,6 +12,9 @@ public class TargetDetail {
     @Column(name = "detail_id") // THÊM DÒNG NÀY ĐỂ ÁNH XẠ ĐÚNG TÊN CỘT TRONG DB
     private Long detailId; // ĐÃ SỬA: Thay đổi kiểu dữ liệu từ String sang Long
 
+    @Transient // Báo cho JPA không lưu trường này vào DB
+    private Long metricId;
+
     @Column(name = "comparison_type")
     private String comparisonType;
 
@@ -92,5 +95,13 @@ public class TargetDetail {
 
     public void setMetricType(MetricType metricType) {
         this.metricType = metricType;
+    }
+
+    public Long getMetricId() {
+        return metricId;
+    }
+
+    public void setMetricId(Long metricId) {
+        this.metricId = metricId;
     }
 }

@@ -34,7 +34,11 @@ public class DailyLogServiceImpl implements DailyLogService {
             username
         );
     }
-    
+        @Override
+    public DailyLog save(DailyLog log) {
+        return dailyLogRepo.save(log);
+    }
+
     @Override
     @Transactional(readOnly = true) // Cần Transactional để LAZY loading hoạt động
     public List<DailyLogDTO> getAllLogs() {
@@ -42,6 +46,23 @@ public class DailyLogServiceImpl implements DailyLogService {
                 .stream()
                 .map(this::convertToDto) // Chuyển mỗi DailyLog thành DailyLogDTO
                 .collect(Collectors.toList());
+    }
+    @Override
+    @Transactional
+    public DailyLog getOrCreateLogByUserAndDate(Long userId, LocalDate date) {
+        User user = userRepo.findById(userId).orElse(null);
+        if (user == null) return null;
+
+        // Kiểm tra log đã tồn tại chưa
+        return dailyLogRepo.findByUserAndLogDate(user, date)
+            .orElseGet(() -> {
+                DailyLog newLog = new DailyLog();
+                newLog.setUser(user);
+                newLog.setLogDate(date);
+                newLog.setNote("Tự động tạo khi nhập bản ghi sức khỏe");
+
+                return dailyLogRepo.save(newLog);
+            });
     }
 
     @Override
