@@ -4,6 +4,12 @@ import com.example.Healthcare.model.User;
 import com.example.Healthcare.DTO.RegisterRequest;
 import com.example.Healthcare.repository.LoginRepository;
 import com.example.Healthcare.security.JwtUtil;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +25,14 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private EmailService emailService;
+
+    // Lưu trữ OTP: key=email, value=otp
+    private final Map<String, String> otpStore = new ConcurrentHashMap<>();
+    // Lưu trữ thời gian hết hạn OTP: key=email, value=expirationTime
+    private final Map<String, LocalDateTime> otpExpiryStore = new ConcurrentHashMap<>();
 
     @Override
     public User register(RegisterRequest req) {
@@ -58,4 +72,46 @@ public class LoginServiceImpl implements LoginService {
         userRepo.save(user);
     }
 
+    @Override
+    public void generateAndSendOtp(String email) {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with this email"));
+
+        Random random = new Random();
+        String otp = String.format("%06d", random.nextInt(999999));
+
+        // Lưu OTP và thời gian hết hạn (ví dụ 5 phút)
+        otpStore.put(email, otp);
+        otpExpiryStore.put(email, LocalDateTime.now().plusMinutes(5));
+
+        emailService.sendOtpEmail(email, otp);
+    }
+
+    @Override
+    public void resetPassword(String email, String otp, String newPassword) {
+        // 1. Xác thực OTP
+        String storedOtp = otpStore.get(email);
+        LocalDateTime expiryTime = otpExpiryStore.get(email);
+
+        if (storedOtp == null || !storedOtp.equals(otp)) {
+            throw new IllegalArgumentException("Invalid OTP.");
+        }
+
+        if (expiryTime == null || LocalDateTime.now().isAfter(expiryTime)) {
+            otpStore.remove(email); // Xoá OTP hết hạn
+            otpExpiryStore.remove(email);
+            throw new IllegalArgumentException("OTP has expired.");
+        }
+
+        // 2. Tìm người dùng và cập nhật mật khẩu
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with this email"));
+
+        user.setPassword(passwordEncoder.encode(newPassword)); // Mã hoá mật khẩu mới
+        userRepo.save(user);
+
+        // 3. Xoá OTP sau khi sử dụng thành công
+        otpStore.remove(email);
+        otpExpiryStore.remove(email);
+    }
 }

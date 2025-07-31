@@ -3,6 +3,7 @@ package com.example.Healthcare.DTO;
 public class ResetPasswordRequest {
     private String email;
     private String newPassword;
+    private String otp; // Thêm trường này
 
     public ResetPasswordRequest() {}
 
@@ -26,4 +27,7 @@ public class ResetPasswordRequest {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
+
+    public String getOtp() { return otp; }
+    public void setOtp(String otp) { this.otp = otp; }
 }
