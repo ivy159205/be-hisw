@@ -135,43 +135,59 @@ public class HealthRecordServiceImpl implements HealthRecordService {
     @Override
     @Transactional
     public List<HealthRecordDTO> updateHealthRecordsFromDTO(HealthRecordCreateDTO dto) {
-        User user = userRepository.findById(dto.getUserId()).orElseThrow();
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + dto.getUserId()));
         LocalDate date = LocalDate.parse(dto.getDate());
 
-        // Tìm hoặc tạo DailyLog
+        // 1. Tìm hoặc tạo DailyLog (phần này đã đúng)
         DailyLog dailyLog = dailyLogRepository.findByUserAndLogDate(user, date)
                 .orElseGet(() -> {
                     DailyLog log = new DailyLog();
                     log.setUser(user);
                     log.setLogDate(date);
+                    // Note sẽ được set ở dưới
                     return dailyLogRepository.save(log);
                 });
 
-        // ✅ Cập nhật note nếu có trong DTO
+        // Cập nhật note cho DailyLog
         dailyLog.setNote(dto.getNotes());
-        dailyLogRepository.save(dailyLog); // Đảm bảo thay đổi được lưu
+        dailyLogRepository.save(dailyLog); // Lưu thay đổi của note
 
-        List<HealthRecordDTO> updatedDtos = new ArrayList<>();
+        List<HealthRecordDTO> resultDtos = new ArrayList<>();
 
+        // 2. Lặp qua từng metric và thực hiện UPSERT
         for (MetricDTO metricDTO : dto.getMetrics()) {
+            // Bỏ qua nếu giá trị rỗng hoặc chỉ có khoảng trắng
+            if (metricDTO.getValue() == null || metricDTO.getValue().trim().isEmpty()) {
+                continue;
+            }
+
             Long metricId = (long) metricDTO.getMetricId();
-            MetricType metricType = metricTypeRepository.findById(metricId).orElseThrow();
+            MetricType metricType = metricTypeRepository.findById(metricId)
+                    .orElseThrow(() -> new RuntimeException("MetricType not found with id: " + metricId));
 
             // Tìm bản ghi health record hiện tại
             HealthRecord record = healthRecordRepository
-                    .findByDailyLog_User_UserIdAndDailyLog_LogDateAndMetricType_MetricId(
-                            user.getUserId(), date, metricId)
+                    .findByDailyLogAndMetricType(dailyLog, metricType) // Truy vấn đơn giản hơn
                     .orElse(null);
 
             if (record != null) {
+                // ----- TRƯỜNG HỢP 1: TÌM THẤY -> CẬP NHẬT (UPDATE) -----
                 record.setValue(metricDTO.getValue());
+            } else {
+                // ----- TRƯỜNG HỢP 2: KHÔNG TÌM THẤY -> TẠO MỚI (INSERT) -----
+                record = new HealthRecord();
                 record.setDailyLog(dailyLog);
                 record.setMetricType(metricType);
-                updatedDtos.add(convertToDto(healthRecordRepository.save(record)));
+                record.setValue(metricDTO.getValue());
             }
+
+            // Lưu bản ghi (dù là cập nhật hay tạo mới) và thêm vào danh sách trả về
+            HealthRecord savedRecord = healthRecordRepository.save(record);
+            resultDtos.add(convertToDto(savedRecord)); // Giả sử bạn có hàm convertToDto
         }
 
-        return updatedDtos;
+        return resultDtos;
     }
 
 }
